@@ -17,5 +17,7 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 add_subdirectory(litepcie)
 
+add_subdirectory(libthunderscope)
+
 add_subdirectory(example)
 

@@ -10,8 +10,10 @@
 #include <stdarg.h>
 #include <inttypes.h>
 //#include <unistd.h>
+
 #include <fcntl.h>
 #include <signal.h>
+#include <math.h>
 #include <time.h>
 
 #include <chrono>
@@ -50,11 +52,20 @@ static int litepcie_device_num;
 
 static int64_t get_time_ms(void)
 {
-    struct timespec timeNow;
-    timespec_get(&timeNow, TIME_UTC);
+    long            ms; // Milliseconds
+    time_t          s;  // Seconds
+    struct timespec spec;
 
-    int64_t timeMS = (timeNow.tv_sec * 1000) + (timeNow.tv_nsec / 1000000);
-    return timeMS;
+    clock_gettime(CLOCK_REALTIME, &spec);
+
+    s  = spec.tv_sec;
+    ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
+    if (ms > 999) {
+        s++;
+        ms = 0;
+    }
+
+    return ms;
 }
 
 
